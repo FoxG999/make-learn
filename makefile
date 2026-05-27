@@ -1,22 +1,29 @@
-#显示告诉make clean是个伪目标
-.PHONY: clean all
+CC = gcc
+SRC_DIR = src
+BUILD_DIR = build
 
-#不用all，make默认生成第一个规则	
-all: build/hello build/world
-	echo "all done"
+# 第一行写上所有的伪目标（别名），告诉 make 它们不是真实的文件
+.PHONY: all clean hello world
 
-build/hello: build/main.o build/message.o
-	gcc build/main.o build/message.o -o build/hello
+# 默认目标：敲 make 就编译所有东西
+all: hello world
+	@echo "All targets built successfully!"
 
-build/world: build/main.o build/message.o
-	gcc build/main.o build/message.o -o build/world
+# --- 核心马甲区（别名映射） ---
+# 当你在终端敲 make hello 时，它知道真正要干活的是 $(BUILD_DIR)/hello
+hello: $(BUILD_DIR)/hello
+world: $(BUILD_DIR)/world
 
-build/main.o: src/main.c
-	gcc -c src/main.c -o build/main.o
+# --- 实际干活的规则区 ---
+$(BUILD_DIR)/hello: $(BUILD_DIR)/main.o $(BUILD_DIR)/message.o
+	$(CC) $^ -o $@
 
-build/message.o: src/message.c
-	gcc -c src/message.c -o build/message.o
+$(BUILD_DIR)/world: $(BUILD_DIR)/main.o $(BUILD_DIR)/message.o
+	$(CC) $^ -o $@
 
-#伪目标(没有实际文件)
+# 万能模具：如何把 .c 变成 .o
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) -c $< -o $@
+
 clean:
-	rm -f build/*
+	rm -f $(BUILD_DIR)/*
