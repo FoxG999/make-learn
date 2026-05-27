@@ -5,6 +5,6 @@
 
 
 void message() {
-    printf("learn-make");
-    return 0;
+    printf("learn-make\n");
+    return;
 }
