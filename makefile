@@ -1,0 +1,2 @@
+target : dependecies
+    action

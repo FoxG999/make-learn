@@ -4,8 +4,9 @@
 
 
 #include<stdio.h>
-#include<iostream>
+#include "../head/message.h"
+
 int main() {
-    std::cout >> "make-learn";
+    message();
     return 0;
 }
